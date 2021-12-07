@@ -1,10 +1,32 @@
+<html>
+<head>
+
+<style>
+html, body{ 
+	background-color:#000000;
+	color:#00FF00;
+	font-size:72px;
+}
+</style>
+
+<link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+<link rel="manifest" href="favicon/site.webmanifest">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+</head>
+	
+<body>
+<div class="ipip">
 <script type="text/javascript">
-
-	function getIP(json) {
-
-		document.write(json.ip);
-
-	}
-
+function getIP(json){
+document.write(json.ip);
+}
 </script>
 <script type="text/javascript" src="https://api.ipify.org?format=jsonp&callback=getIP"></script>
+</div>
+	
+</body>
+</html>
