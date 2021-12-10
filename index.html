@@ -11,6 +11,19 @@ html, body{
 	color:#00FF00;
 	font-size:72px;
 }
+	
+@keyframes cursor{
+  50%{ border-color: transparent; }
+}
+ 
+.ip_text{
+  display: table-cell;
+  vertical-align: middle;
+  font-size: 32px;
+  height: 32px;
+  border-right: .05em solid black;
+  animation: cursor 0.5s ease infinite;
+}
 </style>
 
 <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
@@ -29,7 +42,23 @@ function getIP(json){
 document.write(json.ip);
 }
 </script>
-<script type="text/javascript" src="https://api.ipify.org?format=jsonp&callback=getIP"></script>
+	
+<div class="ip_text"><script type="text/javascript" src="https://api.ipify.org?format=jsonp&callback=getIP"></script></div>
+	
+<script type="text/javascript">
+const content = "Typing Effect"
+const text = document.querySelector(".ip_text")
+let index = 0;
+ 
+function typing(){
+  text.textContent += content[index++]
+  if(index > content.length){
+    text.textContent = ""
+    index = 0;
+  }
+}
+setInterval(typing, 500)
+</script>
 </div>
 	
 </body>
