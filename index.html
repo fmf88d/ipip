@@ -12,17 +12,21 @@ html, body{
 	font-size:72px;
 }
 	
-@keyframes cursor{
-  50%{ border-color: transparent; }
+div.ip_text{
+  display: none;
 }
- 
-.ip_text{
-  display: table-cell;
-  vertical-align: middle;
-  font-size: 32px;
-  height: 32px;
-  border-right: .05em solid black;
-  animation: cursor 0.5s ease infinite;
+
+.ip_text {  
+/*position: absolute;*/ 
+  display: inline-block; 
+  animation-name: cursor; 
+  animation-duration: 0.3s; 
+  animation-iteration-count: infinite; 
+ } 
+ @keyframes cursor{ 
+  0%{border-right: 1px solid #fff} 
+  50%{border-right: 1px solid #000} 
+  100%{border-right: 1px solid #fff} 
 }
 </style>
 
@@ -46,18 +50,31 @@ document.write(json.ip);
 <div class="ip_text"><script type="text/javascript" src="https://api.ipify.org?format=jsonp&callback=getIP"></script></div>
 	
 <script type="text/javascript">
-const content = ":DXD:)"
-const text = document.querySelector(".ip_text")
-let index = 0;
- 
-function typing(){
-  text.textContent += content[index++]
-  if(index > content.length){
-    text.textContent = ""
-    index = 0;
-  }
-}
-setInterval(typing, 200)
+var typingBool = false; 
+var typingIdx=0; 
+
+// 타이핑될 텍스트를 가져온다 
+var typingTxt = $(".ip_text").text(); 
+
+typingTxt=typingTxt.split(""); // 한글자씩 자른다. 
+
+if(typingBool==false){ 
+  // 타이핑이 진행되지 않았다면 
+   typingBool=true;     
+   var tyInt = setInterval(typing,100); // 반복동작 
+} 
+     
+function typing(){ 
+  if(typingIdx<typingTxt.length){ 
+    // 타이핑될 텍스트 길이만큼 반복 
+    $(".typing").append(typingTxt[typingIdx]);
+    // 한글자씩 이어준다. 
+    typingIdx++; 
+   } else{ 
+     //끝나면 반복종료 
+    clearInterval(tyInt); 
+   } 
+}  
 </script>
 </div>
 	
