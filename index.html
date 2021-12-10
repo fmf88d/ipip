@@ -12,17 +12,132 @@ html, body{
 	font-size:72px;
 }
 
-.ip_text {  
-/*position: absolute;*/ 
-  display: inline-block; 
-  animation-name: cursor; 
-  animation-duration: 0.3s; 
-  animation-iteration-count: infinite; 
- } 
- @keyframes cursor{ 
-  0%{border-right: 1px solid #fff} 
-  50%{border-right: 1px solid #000} 
-  100%{border-right: 1px solid #fff} 
+.css-typing p {
+  border-right: .15em solid orange;
+  font-family: "Courier";
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.css-typing p:nth-child(1) {
+  width: 7.3em;
+  -webkit-animation: type 2s steps(40, end);
+  animation: type 2s steps(40, end);
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+}
+
+.css-typing p:nth-child(2) {
+  width: 11.5em;
+  opacity: 0;
+  -webkit-animation: type2 2s steps(40, end);
+  animation: type2 2s steps(40, end);
+  -webkit-animation-delay: 2s;
+  animation-delay: 2s;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+}
+
+.css-typing p:nth-child(3) {
+  width: 7.3em;
+  opacity: 0;
+  -webkit-animation: type3 5s steps(20, end), blink .5s step-end infinite alternate;
+  animation: type3 5s steps(20, end), blink .5s step-end infinite alternate;
+  -webkit-animation-delay: 4s;
+  animation-delay: 4s;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+}
+
+@keyframes type {
+  0% {
+    width: 0;
+  }
+  99.9% {
+    border-right: .15em solid orange;
+  }
+  100% {
+    border: none;
+  }
+}
+
+@-webkit-keyframes type {
+  0% {
+    width: 0;
+  }
+  99.9% {
+    border-right: .15em solid orange;
+  }
+  100% {
+    border: none;
+  }
+}
+
+@keyframes type2 {
+  0% {
+    width: 0;
+  }
+  1% {
+    opacity: 1;
+  }
+  99.9% {
+    border-right: .15em solid orange;
+  }
+  100% {
+    opacity: 1;
+    border: none;
+  }
+}
+
+@-webkit-keyframes type2 {
+  0% {
+    width: 0;
+  }
+  1% {
+    opacity: 1;
+  }
+  99.9% {
+    border-right: .15em solid orange;
+  }
+  100% {
+    opacity: 1;
+    border: none;
+  }
+}
+
+@keyframes type3 {
+  0% {
+    width: 0;
+  }
+  1% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes type3 {
+  0% {
+    width: 0;
+  }
+  1% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes blink {
+  50% {
+    border-color: transparent;
+  }
+}
+@-webkit-keyframes blink {
+  50% {
+    border-color: tranparent;
+  }
 }
 </style>
 
@@ -42,36 +157,11 @@ function getIP(json){
 document.write(json.ip);
 }
 </script>
-
-<div class="ip_text"><script type="text/javascript" src="https://api.ipify.org?format=jsonp&callback=getIP"></script></div>
-	
-<script type="text/javascript">
-var typingBool = false; 
-var typingIdx=0; 
-
-// 타이핑될 텍스트를 가져온다 
-var typingTxt = $(".ip_text").text(); 
-
-typingTxt=typingTxt.split(""); // 한글자씩 자른다. 
-
-if(typingBool==false){ 
-  // 타이핑이 진행되지 않았다면 
-   typingBool=true;     
-   var tyInt = setInterval(typing,100); // 반복동작 
-} 
-     
-function typing(){ 
-  if(typingIdx<typingTxt.length){ 
-    // 타이핑될 텍스트 길이만큼 반복 
-    $(".typing").append(typingTxt[typingIdx]);
-    // 한글자씩 이어준다. 
-    typingIdx++; 
-   } else{ 
-     //끝나면 반복종료 
-    clearInterval(tyInt); 
-   } 
-}  
-</script>
+<div class="css-typing">
+  <p>
+    <script type="text/javascript" src="https://api.ipify.org?format=jsonp&callback=getIP"></script>
+  </p>
+</div>
 </div>
 	
 </body>
