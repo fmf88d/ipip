@@ -12,11 +12,7 @@ html, body{
 	font-size:72px;
 }
 
-p.typing-txt{
-  display: none;
-}
-
-.typing {  
+.ip_text {  
 /*position: absolute;*/ 
   display: inline-block; 
   animation-name: cursor; 
@@ -46,9 +42,7 @@ function getIP(json){
 document.write(json.ip);
 }
 </script>
-	
-<p class="typing-txt"><script type="text/javascript" src="https://api.ipify.org?format=jsonp&callback=getIP"></script></p> 
-<p class="typing"></p> 
+
 <div class="ip_text"><script type="text/javascript" src="https://api.ipify.org?format=jsonp&callback=getIP"></script></div>
 	
 <script type="text/javascript">
@@ -56,7 +50,7 @@ var typingBool = false;
 var typingIdx=0; 
 
 // 타이핑될 텍스트를 가져온다 
-var typingTxt = $(".typing-txt").text(); 
+var typingTxt = $(".ip_text").text(); 
 
 typingTxt=typingTxt.split(""); // 한글자씩 자른다. 
 
