@@ -78,14 +78,14 @@ html, body{
 <body>
 <div class="ipip">
 <script type="text/javascript">
-function getIP(json){
-document.write(json.ip);
-}
+	function getIP(json) {
+		document.write("My IP address is: ", json.ip);
+	}
 </script>
 	
 <div class="ipip_css-typing">
   <p>
-    <script type="text/javascript" src="https://api.ipify.org?format=jsonp&callback=getIP"></script>
+    <script type="text/javascript" src="https://api.my-ip.io/ip.js&callback=getIP"></script>
   </p>
 </div>
 	
