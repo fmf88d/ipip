@@ -77,23 +77,15 @@ html, body{
 	
 <body>
 <div class="ipip">
-
+<script type="text/javascript">
+function getIP(json){
+document.write(json.ip);
+}
+</script>
+	
 <div class="ipip_css-typing">
   <p>
-    <script type="text/javascript">
-	$(function() {
-		$.ajax({
-            url: 'https://api.my-ip.io/ip.json',
-            method: 'GET'
-        })
-        .done(function(data) {
-            alert(data.ip);
-        })
-        .fail(function() {
-            // Handle failure
-        });
-	});
-</script>
+    <script type="text/javascript" src="https://api64.ipify.org?format=jsonp&callback=getIP"></script>
   </p>
 </div>
 	
