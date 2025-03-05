@@ -294,12 +294,12 @@ async function loadGuestbook(page = 1) {
 
         const start = (currentPage - 1) * ENTRIES_PER_PAGE;
         const end = start + ENTRIES_PER_PAGE;
-        const paginatedEntries = entries.slice().reverse().slice(start, end);
+        const paginatedEntries = entries.slice().reverse().slice(start, end); // 최신순으로 정렬
 
         if (paginatedEntries.length === 0) {
             list.innerHTML = 'No entries yet... 👻';
         } else {
-            paginatedEntries.reverse().forEach(entry => {
+            paginatedEntries.forEach(entry => { // 역순 제거
                 const div = document.createElement('div');
                 div.className = 'entry';
                 div.innerHTML = `<span>${entry.name}</span>: ${entry.message} <small>(${entry.date})</small>`;
