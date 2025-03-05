@@ -154,8 +154,28 @@
         }
     </style>
 
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Firebase 앱과 Realtime Database 모듈을 가져옵니다.
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
+        import { getDatabase, ref, set, push, get, child } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js';
+
+        // Firebase 설정
+        const firebaseConfig = {
+            apiKey: "AIzaSyCpVUTb3OY6anUwAKE91gZn6-MS7pjgiyk",
+            authDomain: "ipip-1a70d.firebaseapp.com",
+            databaseURL: "https://ipip-1a70d-default-rtdb.firebaseio.com",
+            projectId: "ipip-1a70d",
+            storageBucket: "ipip-1a70d.firebasestorage.app",
+            messagingSenderId: "101728619870",
+            appId: "1:101728619870:web:4ccbbdc07d158e181793cf",
+            measurementId: "G-9FTKXD8PMQ"
+        };
+
+        // Firebase 앱 초기화
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+    </script>
 
 </head>
 <body>
@@ -176,21 +196,6 @@
     </div>
 
     <script>
-        // Firebase 설정
-        const firebaseConfig = {
-            apiKey: "AIzaSyCpVUTb3OY6anUwAKE91gZn6-MS7pjgiyk",
-            authDomain: "ipip-1a70d.firebaseapp.com",
-            databaseURL: "https://ipip-1a70d-default-rtdb.firebaseio.com",
-            projectId: "ipip-1a70d",
-            storageBucket: "ipip-1a70d.firebasestorage.app",
-            messagingSenderId: "101728619870",
-            appId: "1:101728619870:web:4ccbbdc07d158e181793cf",
-            measurementId: "G-9FTKXD8PMQ"
-        };
-
-        const app = firebase.initializeApp(firebaseConfig);
-        const database = firebase.database(app);
-
         // IP 가져오기 (IPv4만)
         function getIP() {
             const ipElement = document.getElementById('ip-address');
@@ -230,7 +235,7 @@
             list.innerHTML = 'Loading... 👾';
 
             try {
-                const snapshot = await firebase.database().ref('guestbook').once('value');
+                const snapshot = await get(ref(database, 'guestbook'));
                 const entries = snapshot.val() || [];
                 list.innerHTML = '';
                 pagination.innerHTML = '';
@@ -299,8 +304,8 @@
             };
 
             try {
-                const guestbookRef = firebase.database().ref('guestbook');
-                await guestbookRef.push(entry);
+                const guestbookRef = ref(database, 'guestbook');
+                await push(guestbookRef, entry);
 
                 alert('방명록에 기록되었습니다! 🎉');
                 document.getElementById('name').value = '';
