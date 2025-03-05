@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>아이피 확인 - ipip.kr</title>
-    <meta name="Description" content="ip확인 쉬운 도메인 ipip.kr">
-    <meta name="Keywords" content="ip, 아이피, 내 아이피, ip 확인, ip주소 확인, ipconfig, ifconfig, ip 조회">
+    <title>아이피 확인 & 방명록 - ipip.kr</title>
+    <meta name="Description" content="ip확인과 방명록이 있는 ipip.kr">
+    <meta name="Keywords" content="ip, 아이피, 내 아이피, ip 확인, ip주소 확인, ipconfig, ifconfig, ip 조회, 방명록">
     <meta name="naver-site-verification" content="4ebe627e4f4ca60b90beee9fdb0e026e2c3ccd22" />
 
     <style>
         html, body {
             margin: 0;
-            padding: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            padding: 20px;
+            min-height: 100vh;
             background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%);
             color: #00FF00;
             font-family: "Courier New", monospace;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
         }
 
         .hacker-box {
@@ -27,28 +27,28 @@
             border: 3px dashed #00FF00;
             border-radius: 10px;
             box-shadow: inset 0 0 20px rgba(0, 255, 0, 0.3), 0 0 30px rgba(0, 255, 0, 0.7);
+            width: 600px;
             text-align: center;
-            width: 500px;
             position: relative;
-            overflow: hidden;
         }
 
         .hacker-box::before {
-            content: "🔒 YOUR IP ADDRESS 🔓";
+            content: "🔒 HACKER TERMINAL 🔓";
             position: absolute;
-            top: -10px;
+            top: 5px;
             left: 50%;
             transform: translateX(-50%);
             font-size: 18px;
             color: #00FF00;
             text-shadow: 0 0 5px #00FF00;
             background: #000;
-            padding: 0 10px;
+            padding: 5px 10px;
+            border-radius: 3px;
         }
 
         h1 {
             font-size: 36px;
-            margin: 0 0 20px;
+            margin: 20px 0;
             text-shadow: 0 0 10px #00FF00;
             animation: glitch 2s infinite;
         }
@@ -73,6 +73,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 0 10px #00FF00;
+            margin: 10px;
         }
 
         button:hover {
@@ -83,9 +84,54 @@
 
         .emoji {
             font-size: 24px;
-            margin-top: 10px;
+            margin: 10px 0;
             color: #00FF00;
             text-shadow: 0 0 5px #00FF00;
+        }
+
+        /* 방명록 스타일 */
+        .guestbook-section {
+            margin-top: 40px;
+            text-align: left;
+        }
+
+        input, textarea {
+            width: 80%;
+            padding: 10px;
+            margin: 10px auto;
+            display: block;
+            background: #1a1a1a;
+            border: 1px solid #00FF00;
+            color: #00FF00;
+            font-family: "Courier New", monospace;
+            font-size: 16px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px #00FF00;
+        }
+
+        textarea {
+            height: 100px;
+            resize: none;
+        }
+
+        #guestbook-list {
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            border-top: 1px dashed #00FF00;
+            padding-top: 10px;
+        }
+
+        .entry {
+            border-bottom: 1px dashed #00FF00;
+            padding: 10px 0;
+            font-size: 16px;
+            text-shadow: 0 0 3px #00FF00;
+        }
+
+        .entry span {
+            color: #00CC00;
+            font-weight: bold;
         }
 
         @keyframes glitch {
@@ -111,6 +157,15 @@
         <div><span id="ip-address">Scanning...</span></div>
         <button onclick="copyIP()">Copy IP 🚀</button>
         <div class="emoji">👾 Your IP is locked! 🔐</div>
+
+        <!-- 방명록 섹션 -->
+        <div class="guestbook-section">
+            <h1>Guestbook 💾</h1>
+            <input type="text" id="name" placeholder="Name (ex: Hacker123)" maxlength="20">
+            <textarea id="message" placeholder="Message (ex: Greetings from the dark web!)" maxlength="200"></textarea>
+            <button onclick="submitEntry()">Submit 📡</button>
+            <div id="guestbook-list"></div>
+        </div>
     </div>
 
     <script>
@@ -146,8 +201,83 @@
                 });
         }
 
-        // 페이지 로드 시 IP 자동 조회
-        window.onload = getIP;
+        // jsonbin.io API 설정
+        const API_KEY = '$2a$10$lhNSmOFLgwQ6YE4nTd8rtewkm/9Uh1GDh8JCULstOrs29D6Ricb4q'; // jsonbin.io에서 발급받은 API 키로 교체
+        const BIN_ID = '67c8c858e41b4d34e4a16e00'; // jsonbin.io에서 생성한 Bin ID로 교체
+        const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+
+        // 방명록 불러오기
+        async function loadGuestbook() {
+            const list = document.getElementById('guestbook-list');
+            list.innerHTML = 'Loading... 👾';
+
+            try {
+                const response = await fetch(API_URL, {
+                    headers: { 'X-Master-Key': API_KEY }
+                });
+                const data = await response.json();
+                const entries = data.record.entries || [];
+                list.innerHTML = '';
+                entries.reverse().forEach(entry => {
+                    const div = document.createElement('div');
+                    div.className = 'entry';
+                    div.innerHTML = `<span>${entry.name}</span>: ${entry.message} <small>(${entry.date})</small>`;
+                    list.appendChild(div);
+                });
+            } catch (error) {
+                list.innerHTML = 'Error loading entries 😢';
+                console.error('Load error:', error);
+            }
+        }
+
+        // 방명록 제출
+        async function submitEntry() {
+            const name = document.getElementById('name').value.trim();
+            const message = document.getElementById('message').value.trim();
+
+            if (!name || !message) {
+                alert('이름과 메시지를 입력해주세요! 😅');
+                return;
+            }
+
+            const entry = {
+                name: name,
+                message: message,
+                date: new Date().toLocaleString('ko-KR')
+            };
+
+            try {
+                const response = await fetch(API_URL, {
+                    headers: { 'X-Master-Key': API_KEY }
+                });
+                const data = await response.json();
+                const entries = data.record.entries || [];
+                entries.push(entry);
+
+                await fetch(API_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'X-Master-Key': API_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ entries })
+                });
+
+                alert('방명록에 기록되었습니다! 🎉');
+                document.getElementById('name').value = '';
+                document.getElementById('message').value = '';
+                loadGuestbook();
+            } catch (error) {
+                alert('오류 발생 😢: ' + error);
+                console.error('Submit error:', error);
+            }
+        }
+
+        // 페이지 로드 시 IP와 방명록 초기화
+        window.onload = function() {
+            getIP();
+            loadGuestbook();
+        };
     </script>
 </body>
 </html>
