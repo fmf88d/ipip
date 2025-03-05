@@ -11,94 +11,66 @@
     <style>
         html, body {
             margin: 0;
-            padding: 20px;
+            padding: 10px;
             min-height: 100vh;
             background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%);
             color: #00FF00;
             font-family: "Courier New", monospace;
             display: flex;
+            flex-direction: column;
             justify-content: center;
-            align-items: flex-start;
+            align-items: center;
         }
 
         .hacker-box {
             background: rgba(0, 0, 0, 0.9);
-            padding: 40px;
+            padding: 20px;
             border: 3px dashed #00FF00;
             border-radius: 10px;
             box-shadow: inset 0 0 20px rgba(0, 255, 0, 0.3), 0 0 30px rgba(0, 255, 0, 0.7);
-            width: 600px;
+            width: 100%;
+            max-width: 90%;
             text-align: center;
             position: relative;
         }
 
-        .hacker-box::before {
-            content: "🔒 내 IP주소 보기 🔓";
-            position: absolute;
-            top: 5px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 18px;
-            color: #00FF00;
-            text-shadow: 0 0 5px #00FF00;
-            background: #000;
-            padding: 5px 10px;
-            border-radius: 3px;
-        }
-
         h1 {
-            font-size: 36px;
-            margin: 20px 0;
+            font-size: 6vw;
+            margin: 10px 0;
             text-shadow: 0 0 10px #00FF00;
             animation: glitch 2s infinite;
         }
 
         #ip-address {
-            font-size: 64px;
+            font-size: 8vw;
             font-weight: bold;
             color: #00FF00;
             text-shadow: 0 0 15px #00FF00;
             display: inline-block;
-            margin: 20px 0;
+            margin: 10px 0;
         }
 
         button {
-            padding: 15px 30px;
+            width: 100%;
+            max-width: 300px;
+            padding: 12px;
             background: #00FF00;
             color: #000;
             border: none;
             border-radius: 5px;
             font-family: "Courier New", monospace;
-            font-size: 20px;
+            font-size: 18px;
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 0 10px #00FF00;
-            margin: 10px;
-        }
-
-        button:hover {
-            background: #00CC00;
-            transform: scale(1.1);
-            box-shadow: 0 0 20px #00FF00;
-        }
-
-        .emoji {
-            font-size: 24px;
-            margin: 10px 0;
-            color: #00FF00;
-            text-shadow: 0 0 5px #00FF00;
-        }
-
-        .guestbook-section {
-            margin-top: 40px;
-            text-align: left;
+            margin: 10px auto;
+            display: block;
         }
 
         input, textarea {
-            width: 80%;
+            width: 100%;
+            max-width: 400px;
             padding: 10px;
-            margin: 10px auto;
-            display: block;
             background: #1a1a1a;
             border: 1px solid #00FF00;
             color: #00FF00;
@@ -106,63 +78,20 @@
             font-size: 16px;
             border-radius: 5px;
             box-shadow: 0 0 5px #00FF00;
+            display: block;
+            margin: 10px auto;
         }
 
         textarea {
-            height: 100px;
-            resize: none;
-        }
-
-        #guestbook-list {
-            margin-top: 20px;
-            max-height: 300px;
-            overflow-y: auto;
-            border-top: 1px dashed #00FF00;
-            padding-top: 10px;
-        }
-
-        .entry {
-            border-bottom: 1px dashed #00FF00;
-            padding: 10px 0;
-            font-size: 16px;
-            text-shadow: 0 0 3px #00FF00;
-        }
-
-        .entry span {
-            color: #00CC00;
-            font-weight: bold;
-        }
-
-        .pagination {
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        @keyframes glitch {
-            0% { transform: translate(0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(2px, -2px); }
-            60% { transform: translate(-2px, -2px); }
-            80% { transform: translate(2px, 2px); }
-            100% { transform: translate(0); }
+            height: 80px;
         }
     </style>
-
-    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
-    <link rel="manifest" href="favicon/site.webmanifest">
-    <meta name="msapplication-TileColor" content="#da532c">
-    <meta name="theme-color" content="#ffffff">
 </head>
 <body>
     <div class="hacker-box">
         <h1>IP Scanner Activated</h1>
         <div><span id="ip-address">Scanning...</span></div>
         <button onclick="copyIP()">Copy IP 🚀</button>
-        <div class="emoji">👾 Your IP is locked! 🔐</div>
 
         <div class="guestbook-section">
             <h1>방명록 💾</h1>
@@ -170,12 +99,10 @@
             <textarea id="message" placeholder="Message (ex: Greetings from the dark web!)" maxlength="200"></textarea>
             <button onclick="submitEntry()">작성 📡</button>
             <div id="guestbook-list"></div>
-            <div class="pagination" id="pagination"></div>
         </div>
     </div>
 
     <script>
-        // IP 가져오기 (IPv4만)
         function getIP() {
             const ipElement = document.getElementById('ip-address');
             ipElement.textContent = 'Scanning...';
@@ -191,7 +118,6 @@
                 });
         }
 
-        // IP 복사 기능
         function copyIP() {
             const ipText = document.getElementById('ip-address').textContent;
             if (ipText === 'Scanning...' || ipText.startsWith('Error')) {
@@ -199,138 +125,12 @@
                 return;
             }
             navigator.clipboard.writeText(ipText)
-                .then(() => {
-                    alert('IP 복사 완료! 🎉: ' + ipText);
-                })
-                .catch(err => {
-                    alert('복사 실패 😢: ' + err);
-                });
+                .then(() => alert('IP 복사 완료! 🎉: ' + ipText))
+                .catch(err => alert('복사 실패 😢: ' + err));
         }
 
-        // jsonbin.io API 설정
-        const API_KEY = '$2a$10$LRQ6Bn2k9xiHoUj4kbngB.wvYvR38DmmQQxh2mY7FdIlCo/OSfaaW'; // 실제 API 키
-        const BIN_ID = '67c8cfb5e41b4d34e4a1718e'; // 실제 Bin ID
-        const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}/latest`;
-        const ENTRIES_PER_PAGE = 10; // 페이지당 항목 수
-        let currentPage = 1;
-
-        // 방명록 불러오기
-async function loadGuestbook(page = 1) {
-    const list = document.getElementById('guestbook-list');
-    const pagination = document.getElementById('pagination');
-    list.innerHTML = 'Loading... 👾';
-
-    try {
-        const response = await fetch(API_URL, {
-            headers: { 'X-Master-Key': API_KEY }
-        });
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data = await response.json();
-        console.log('API Response:', data);
-        const entries = (data.record && Array.isArray(data.record.entries)) ? data.record.entries : [];
-        list.innerHTML = '';
-        pagination.innerHTML = '';
-
-        const totalPages = Math.ceil(entries.length / ENTRIES_PER_PAGE);
-        currentPage = Math.min(Math.max(1, page), totalPages);
-
-        const start = (currentPage - 1) * ENTRIES_PER_PAGE;
-        const end = start + ENTRIES_PER_PAGE;
-        const paginatedEntries = entries.slice().reverse().slice(start, end); // 역순 정렬
-
-        if (paginatedEntries.length === 0) {
-            list.innerHTML = 'No entries yet... 👻';
-        } else {
-            paginatedEntries.forEach(entry => {
-                const div = document.createElement('div');
-                div.className = 'entry';
-                div.innerHTML = `<span>${entry.name}</span>: ${entry.message} <small>(${entry.date})</small>`;
-                list.appendChild(div);
-            });
-        }
-
-        // 페이지네이션 버튼 추가
-        if (totalPages > 1) {
-            if (currentPage > 1) {
-                const prevButton = document.createElement('button');
-                prevButton.textContent = 'Previous ⬅️';
-                prevButton.onclick = () => loadGuestbook(currentPage - 1);
-                pagination.appendChild(prevButton);
-            }
-
-            for (let i = 1; i <= totalPages; i++) {
-                const pageButton = document.createElement('button');
-                pageButton.textContent = i;
-                pageButton.onclick = () => loadGuestbook(i);
-                if (i === currentPage) pageButton.style.background = '#00CC00';
-                pagination.appendChild(pageButton);
-            }
-
-            if (currentPage < totalPages) {
-                const nextButton = document.createElement('button');
-                nextButton.textContent = 'Next ➡️';
-                nextButton.onclick = () => loadGuestbook(currentPage + 1);
-                pagination.appendChild(nextButton);
-            }
-        }
-    } catch (error) {
-        list.innerHTML = 'Error loading entries 😢';
-        console.error('Load error:', error);
-    }
-}
-
-        // 방명록 제출
-        async function submitEntry() {
-            const name = document.getElementById('name').value.trim();
-            const message = document.getElementById('message').value.trim();
-
-            if (!name || !message) {
-                alert('이름과 메시지를 입력해주세요! 😅');
-                return;
-            }
-
-            const entry = {
-                name: name,
-                message: message,
-                date: new Date().toLocaleString('ko-KR')
-            };
-
-            try {
-                const response = await fetch(API_URL, {
-                    headers: { 'X-Master-Key': API_KEY }
-                });
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                const data = await response.json();
-                const entries = (data.record && Array.isArray(data.record.entries)) ? data.record.entries : [];
-                entries.push(entry);
-
-                await fetch(API_URL, {
-                    method: 'PUT',
-                    headers: {
-                        'X-Master-Key': API_KEY,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ entries })
-                });
-
-                alert('방명록에 기록되었습니다! 🎉');
-                document.getElementById('name').value = '';
-                document.getElementById('message').value = '';
-                loadGuestbook(1); // 새로고침 시 1페이지로
-            } catch (error) {
-                alert('오류 발생 😢: ' + error);
-                console.error('Submit error:', error);
-            }
-        }
-
-        // 페이지 로드 시 IP와 방명록 초기화
         window.onload = function() {
             getIP();
-            loadGuestbook();
         };
     </script>
 </body>
