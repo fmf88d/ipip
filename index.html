@@ -154,29 +154,6 @@
         }
     </style>
 
-    <!-- Firebase SDK -->
-    <script type="module">
-        // Firebase 앱과 Realtime Database 모듈을 가져옵니다.
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
-        import { getDatabase, ref, set, push, get, child } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js';
-
-        // Firebase 설정
-        const firebaseConfig = {
-            apiKey: "AIzaSyCpVUTb3OY6anUwAKE91gZn6-MS7pjgiyk",
-            authDomain: "ipip-1a70d.firebaseapp.com",
-            databaseURL: "https://ipip-1a70d-default-rtdb.firebaseio.com",
-            projectId: "ipip-1a70d",
-            storageBucket: "ipip-1a70d.firebasestorage.app",
-            messagingSenderId: "101728619870",
-            appId: "1:101728619870:web:4ccbbdc07d158e181793cf",
-            measurementId: "G-9FTKXD8PMQ"
-        };
-
-        // Firebase 앱 초기화
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
-    </script>
-
 </head>
 <body>
     <div class="hacker-box">
@@ -196,130 +173,136 @@
     </div>
 
     <script>
-        // IP 가져오기 (IPv4만)
-        function getIP() {
-            const ipElement = document.getElementById('ip-address');
-            ipElement.textContent = 'Scanning...';
+<script type="module">
+    // Firebase 앱과 Realtime Database 모듈을 가져옵니다.
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
+    import { getDatabase, ref, push, get } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js';
 
-            fetch('https://api64.ipify.org?format=json')
-                .then(response => response.json())
-                .then(data => {
-                    ipElement.textContent = data.ip;
-                })
-                .catch(error => {
-                    ipElement.textContent = 'Error: Unable to retrieve IP';
-                    console.error('IP fetch error:', error);
+    // Firebase 설정
+    const firebaseConfig = {
+        apiKey: "AIzaSyCpVUTb3OY6anUwAKE91gZn6-MS7pjgiyk",
+        authDomain: "ipip-1a70d.firebaseapp.com",
+        databaseURL: "https://ipip-1a70d-default-rtdb.firebaseio.com",
+        projectId: "ipip-1a70d",
+        storageBucket: "ipip-1a70d.firebasestorage.app",
+        messagingSenderId: "101728619870",
+        appId: "1:101728619870:web:4ccbbdc07d158e181793cf",
+        measurementId: "G-9FTKXD8PMQ"
+    };
+
+    // Firebase 앱 초기화
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+
+    // IP 가져오기 (IPv4만)
+    function getIP() {
+        const ipElement = document.getElementById('ip-address');
+        ipElement.textContent = 'Scanning...';
+
+        fetch('https://api64.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => {
+                ipElement.textContent = data.ip;
+            })
+            .catch(error => {
+                ipElement.textContent = 'Error: Unable to retrieve IP';
+                console.error('IP fetch error:', error);
+            });
+    }
+
+    // 방명록 불러오기
+    async function loadGuestbook(page = 1) {
+        const list = document.getElementById('guestbook-list');
+        const pagination = document.getElementById('pagination');
+        list.innerHTML = 'Loading... 👾';
+
+        try {
+            const snapshot = await get(ref(database, 'guestbook'));
+            const entries = snapshot.val() || [];
+            list.innerHTML = '';
+            pagination.innerHTML = '';
+
+            const totalPages = Math.ceil(entries.length / 7);
+            currentPage = Math.min(Math.max(1, page), totalPages);
+
+            const start = (currentPage - 1) * 7;
+            const end = start + 7;
+            const paginatedEntries = entries.slice().reverse().slice(start, end);
+
+            if (paginatedEntries.length === 0) {
+                list.innerHTML = 'No entries yet... 👻';
+            } else {
+                paginatedEntries.forEach(entry => {
+                    const div = document.createElement('div');
+                    div.className = 'entry';
+                    div.innerHTML = `<span>${entry.name}</span>: ${entry.message} <small>(${entry.date})</small>`;
+                    list.appendChild(div);
                 });
-        }
-
-        // IP 복사 기능
-        function copyIP() {
-            const ipText = document.getElementById('ip-address').textContent;
-            if (ipText === 'Scanning...' || ipText.startsWith('Error')) {
-                alert('IP를 먼저 확인해주세요! 😅');
-                return;
             }
-            navigator.clipboard.writeText(ipText)
-                .then(() => {
-                    alert('IP 복사 완료! 🎉: ' + ipText);
-                })
-                .catch(err => {
-                    alert('복사 실패 😢: ' + err);
-                });
-        }
 
-        // 방명록 불러오기
-        async function loadGuestbook(page = 1) {
-            const list = document.getElementById('guestbook-list');
-            const pagination = document.getElementById('pagination');
-            list.innerHTML = 'Loading... 👾';
-
-            try {
-                const snapshot = await get(ref(database, 'guestbook'));
-                const entries = snapshot.val() || [];
-                list.innerHTML = '';
-                pagination.innerHTML = '';
-
-                const totalPages = Math.ceil(entries.length / 7);
-                currentPage = Math.min(Math.max(1, page), totalPages);
-
-                const start = (currentPage - 1) * 7;
-                const end = start + 7;
-                const paginatedEntries = entries.slice().reverse().slice(start, end);
-
-                if (paginatedEntries.length === 0) {
-                    list.innerHTML = 'No entries yet... 👻';
-                } else {
-                    paginatedEntries.forEach(entry => {
-                        const div = document.createElement('div');
-                        div.className = 'entry';
-                        div.innerHTML = `<span>${entry.name}</span>: ${entry.message} <small>(${entry.date})</small>`;
-                        list.appendChild(div);
-                    });
+            if (totalPages > 1) {
+                if (currentPage > 1) {
+                    const prevButton = document.createElement('button');
+                    prevButton.textContent = 'Previous ⬅️';
+                    prevButton.onclick = () => loadGuestbook(currentPage - 1);
+                    pagination.appendChild(prevButton);
                 }
 
-                if (totalPages > 1) {
-                    if (currentPage > 1) {
-                        const prevButton = document.createElement('button');
-                        prevButton.textContent = 'Previous ⬅️';
-                        prevButton.onclick = () => loadGuestbook(currentPage - 1);
-                        pagination.appendChild(prevButton);
-                    }
-
-                    for (let i = 1; i <= totalPages; i++) {
-                        const pageButton = document.createElement('button');
-                        pageButton.textContent = i;
-                        pageButton.onclick = () => loadGuestbook(i);
-                        if (i === currentPage) pageButton.style.background = '#00CC00';
-                        pagination.appendChild(pageButton);
-                    }
-
-                    if (currentPage < totalPages) {
-                        const nextButton = document.createElement('button');
-                        nextButton.textContent = 'Next ➡️';
-                        nextButton.onclick = () => loadGuestbook(currentPage + 1);
-                        pagination.appendChild(nextButton);
-                    }
+                for (let i = 1; i <= totalPages; i++) {
+                    const pageButton = document.createElement('button');
+                    pageButton.textContent = i;
+                    pageButton.onclick = () => loadGuestbook(i);
+                    if (i === currentPage) pageButton.style.background = '#00CC00';
+                    pagination.appendChild(pageButton);
                 }
-            } catch (error) {
-                list.innerHTML = 'Error loading entries 😢';
-                console.error('Load error:', error);
+
+                if (currentPage < totalPages) {
+                    const nextButton = document.createElement('button');
+                    nextButton.textContent = 'Next ➡️';
+                    nextButton.onclick = () => loadGuestbook(currentPage + 1);
+                    pagination.appendChild(nextButton);
+                }
             }
+        } catch (error) {
+            list.innerHTML = 'Error loading entries 😢';
+            console.error('Load error:', error);
+        }
+    }
+
+    // 방명록 작성
+    async function submitEntry() {
+        const name = document.getElementById('name').value.trim();
+        const message = document.getElementById('message').value.trim();
+
+        if (!name || !message) {
+            alert('이름과 메시지를 입력해주세요! 😅');
+            return;
         }
 
-        // 방명록 작성
-        async function submitEntry() {
-            const name = document.getElementById('name').value.trim();
-            const message = document.getElementById('message').value.trim();
+        const entry = {
+            name: name,
+            message: message,
+            date: new Date().toLocaleString('ko-KR')
+        };
 
-            if (!name || !message) {
-                alert('이름과 메시지를 입력해주세요! 😅');
-                return;
-            }
+        try {
+            const guestbookRef = ref(database, 'guestbook');
+            await push(guestbookRef, entry);
 
-            const entry = {
-                name: name,
-                message: message,
-                date: new Date().toLocaleString('ko-KR')
-            };
-
-            try {
-                const guestbookRef = ref(database, 'guestbook');
-                await push(guestbookRef, entry);
-
-                alert('방명록에 기록되었습니다! 🎉');
-                document.getElementById('name').value = '';
-                document.getElementById('message').value = '';
-                loadGuestbook(1);
-            } catch (error) {
-                alert('오류 발생 😢: ' + error);
-                console.error('Submit error:', error);
-            }
+            alert('방명록에 기록되었습니다! 🎉');
+            document.getElementById('name').value = '';
+            document.getElementById('message').value = '';
+            loadGuestbook(1);
+        } catch (error) {
+            alert('오류 발생 😢: ' + error);
+            console.error('Submit error:', error);
         }
+    }
 
-        // 페이지 로드 시 IP 및 방명록 불러오기
-        getIP();
-        loadGuestbook();
-    </script>
+    // 페이지 로드 시 IP 및 방명록 불러오기
+    getIP();
+    loadGuestbook();
+</script>
+    
 </body>
 </html>
