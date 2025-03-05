@@ -211,75 +211,75 @@
         const API_KEY = '$2a$10$LRQ6Bn2k9xiHoUj4kbngB.wvYvR38DmmQQxh2mY7FdIlCo/OSfaaW'; // 실제 API 키
         const BIN_ID = '67c8cfb5e41b4d34e4a1718e'; // 실제 Bin ID
         const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}/latest`;
-        const ENTRIES_PER_PAGE = 3; // 페이지당 항목 수
+        const ENTRIES_PER_PAGE = 10; // 페이지당 항목 수
         let currentPage = 1;
 
         // 방명록 불러오기
-        async function loadGuestbook(page = 1) {
-            const list = document.getElementById('guestbook-list');
-            const pagination = document.getElementById('pagination');
-            list.innerHTML = 'Loading... 👾';
+async function loadGuestbook(page = 1) {
+    const list = document.getElementById('guestbook-list');
+    const pagination = document.getElementById('pagination');
+    list.innerHTML = 'Loading... 👾';
 
-            try {
-                const response = await fetch(API_URL, {
-                    headers: { 'X-Master-Key': API_KEY }
-                });
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                const data = await response.json();
-                console.log('API Response:', data); // 디버깅용 로그
-                const entries = (data.record && Array.isArray(data.record.entries)) ? data.record.entries : [];
-                list.innerHTML = '';
-                pagination.innerHTML = '';
+    try {
+        const response = await fetch(API_URL, {
+            headers: { 'X-Master-Key': API_KEY }
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log('API Response:', data);
+        const entries = (data.record && Array.isArray(data.record.entries)) ? data.record.entries : [];
+        list.innerHTML = '';
+        pagination.innerHTML = '';
 
-                const totalPages = Math.ceil(entries.length / ENTRIES_PER_PAGE);
-                currentPage = Math.min(Math.max(1, page), totalPages);
+        const totalPages = Math.ceil(entries.length / ENTRIES_PER_PAGE);
+        currentPage = Math.min(Math.max(1, page), totalPages);
 
-                const start = (currentPage - 1) * ENTRIES_PER_PAGE;
-                const end = start + ENTRIES_PER_PAGE;
-                const paginatedEntries = entries.slice(start, end);
+        const start = (currentPage - 1) * ENTRIES_PER_PAGE;
+        const end = start + ENTRIES_PER_PAGE;
+        const paginatedEntries = entries.slice().reverse().slice(start, end); // 역순 정렬
 
-                if (paginatedEntries.length === 0) {
-                    list.innerHTML = 'No entries yet... 👻';
-                } else {
-                    paginatedEntries.reverse().forEach(entry => {
-                        const div = document.createElement('div');
-                        div.className = 'entry';
-                        div.innerHTML = `<span>${entry.name}</span>: ${entry.message} <small>(${entry.date})</small>`;
-                        list.appendChild(div);
-                    });
-                }
+        if (paginatedEntries.length === 0) {
+            list.innerHTML = 'No entries yet... 👻';
+        } else {
+            paginatedEntries.forEach(entry => {
+                const div = document.createElement('div');
+                div.className = 'entry';
+                div.innerHTML = `<span>${entry.name}</span>: ${entry.message} <small>(${entry.date})</small>`;
+                list.appendChild(div);
+            });
+        }
 
-                // 페이지네이션 버튼
-                if (totalPages > 1) {
-                    if (currentPage > 1) {
-                        const prevButton = document.createElement('button');
-                        prevButton.textContent = 'Previous ⬅️';
-                        prevButton.onclick = () => loadGuestbook(currentPage - 1);
-                        pagination.appendChild(prevButton);
-                    }
+        // 페이지네이션 버튼 추가
+        if (totalPages > 1) {
+            if (currentPage > 1) {
+                const prevButton = document.createElement('button');
+                prevButton.textContent = 'Previous ⬅️';
+                prevButton.onclick = () => loadGuestbook(currentPage - 1);
+                pagination.appendChild(prevButton);
+            }
 
-                    for (let i = 1; i <= totalPages; i++) {
-                        const pageButton = document.createElement('button');
-                        pageButton.textContent = i;
-                        pageButton.onclick = () => loadGuestbook(i);
-                        if (i === currentPage) pageButton.style.background = '#00CC00';
-                        pagination.appendChild(pageButton);
-                    }
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.textContent = i;
+                pageButton.onclick = () => loadGuestbook(i);
+                if (i === currentPage) pageButton.style.background = '#00CC00';
+                pagination.appendChild(pageButton);
+            }
 
-                    if (currentPage < totalPages) {
-                        const nextButton = document.createElement('button');
-                        nextButton.textContent = 'Next ➡️';
-                        nextButton.onclick = () => loadGuestbook(currentPage + 1);
-                        pagination.appendChild(nextButton);
-                    }
-                }
-            } catch (error) {
-                list.innerHTML = 'Error loading entries 😢';
-                console.error('Load error:', error);
+            if (currentPage < totalPages) {
+                const nextButton = document.createElement('button');
+                nextButton.textContent = 'Next ➡️';
+                nextButton.onclick = () => loadGuestbook(currentPage + 1);
+                pagination.appendChild(nextButton);
             }
         }
+    } catch (error) {
+        list.innerHTML = 'Error loading entries 😢';
+        console.error('Load error:', error);
+    }
+}
 
         // 방명록 제출
         async function submitEntry() {
