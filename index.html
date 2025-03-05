@@ -63,7 +63,10 @@
             text-shadow: 0 0 15px #00FF00;
             display: inline-block;
             margin: 20px 0;
-            word-break: break-all;
+            white-space: nowrap; /* IP 주소가 한 줄에 유지되도록 */
+            overflow-x: auto; /* 가로 스크롤 허용 */
+            max-width: 100%; /* 부모 요소 너비를 초과하지 않음 */
+            box-sizing: border-box;
         }
 
         button {
@@ -151,6 +154,38 @@
             60% { transform: translate(-2px, -2px); }
             80% { transform: translate(2px, 2px); }
             100% { transform: translate(0); }
+        }
+
+        /* 모바일 반응형 스타일 */
+        @media (max-width: 600px) {
+            .hacker-box {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            #ip-address {
+                font-size: 32px; /* 모바일에서 폰트 크기 줄임 */
+                white-space: nowrap; /* 줄바꿈 방지 */
+                overflow-x: auto; /* 가로 스크롤 허용 */
+                padding: 5px;
+            }
+
+            button {
+                padding: 10px 20px;
+                font-size: 16px;
+            }
+
+            .emoji {
+                font-size: 20px;
+            }
+
+            input, textarea {
+                width: 90%;
+                font-size: 14px;
+            }
         }
     </style>
 </head>
