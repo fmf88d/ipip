@@ -17,9 +17,9 @@
             color: #00FF00;
             font-family: "Courier New", monospace;
             display: flex;
-            flex-direction: column;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
+            box-sizing: border-box;
         }
 
         .hacker-box {
@@ -29,48 +29,80 @@
             border-radius: 10px;
             box-shadow: inset 0 0 20px rgba(0, 255, 0, 0.3), 0 0 30px rgba(0, 255, 0, 0.7);
             width: 100%;
-            max-width: 90%;
+            max-width: 600px;
             text-align: center;
             position: relative;
+            box-sizing: border-box;
+        }
+
+        .hacker-box::before {
+            content: "🔒 내 IP주소 보기 🔓";
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 18px;
+            color: #00FF00;
+            text-shadow: 0 0 5px #00FF00;
+            background: #000;
+            padding: 5px 10px;
+            border-radius: 3px;
         }
 
         h1 {
-            font-size: 6vw;
-            margin: 10px 0;
+            font-size: 36px;
+            margin: 20px 0;
             text-shadow: 0 0 10px #00FF00;
             animation: glitch 2s infinite;
         }
 
         #ip-address {
-            font-size: 8vw;
+            font-size: 48px;
             font-weight: bold;
             color: #00FF00;
             text-shadow: 0 0 15px #00FF00;
             display: inline-block;
-            margin: 10px 0;
+            margin: 20px 0;
+            word-break: break-all;
         }
 
         button {
-            width: 100%;
-            max-width: 300px;
-            padding: 12px;
+            padding: 15px 30px;
             background: #00FF00;
             color: #000;
             border: none;
             border-radius: 5px;
             font-family: "Courier New", monospace;
-            font-size: 18px;
+            font-size: 20px;
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 0 10px #00FF00;
-            margin: 10px auto;
-            display: block;
+            margin: 10px;
+        }
+
+        button:hover {
+            background: #00CC00;
+            transform: scale(1.1);
+            box-shadow: 0 0 20px #00FF00;
+        }
+
+        .emoji {
+            font-size: 24px;
+            margin: 10px 0;
+            color: #00FF00;
+            text-shadow: 0 0 5px #00FF00;
+        }
+
+        .guestbook-section {
+            margin-top: 40px;
+            text-align: left;
         }
 
         input, textarea {
-            width: 100%;
-            max-width: 400px;
+            width: 80%;
             padding: 10px;
+            margin: 10px auto;
+            display: block;
             background: #1a1a1a;
             border: 1px solid #00FF00;
             color: #00FF00;
@@ -78,12 +110,47 @@
             font-size: 16px;
             border-radius: 5px;
             box-shadow: 0 0 5px #00FF00;
-            display: block;
-            margin: 10px auto;
         }
 
         textarea {
-            height: 80px;
+            height: 100px;
+            resize: none;
+        }
+
+        #guestbook-list {
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            border-top: 1px dashed #00FF00;
+            padding-top: 10px;
+        }
+
+        .entry {
+            border-bottom: 1px dashed #00FF00;
+            padding: 10px 0;
+            font-size: 16px;
+            text-shadow: 0 0 3px #00FF00;
+        }
+
+        .entry span {
+            color: #00CC00;
+            font-weight: bold;
+        }
+
+        .pagination {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(2px, -2px); }
+            60% { transform: translate(-2px, -2px); }
+            80% { transform: translate(2px, 2px); }
+            100% { transform: translate(0); }
         }
     </style>
 </head>
@@ -92,17 +159,40 @@
         <h1>IP Scanner Activated</h1>
         <div><span id="ip-address">Scanning...</span></div>
         <button onclick="copyIP()">Copy IP 🚀</button>
+        <div class="emoji">👾 Your IP is locked! 🔐</div>
 
         <div class="guestbook-section">
             <h1>방명록 💾</h1>
-            <input type="text" id="name" placeholder="Name (ex: Hacker123)" maxlength="20">
-            <textarea id="message" placeholder="Message (ex: Greetings from the dark web!)" maxlength="200"></textarea>
+            <input type="text" id="name" placeholder="닉네임" maxlength="20">
+            <textarea id="message" placeholder="여기에 내용을 적어주세용" maxlength="200"></textarea>
             <button onclick="submitEntry()">작성 📡</button>
             <div id="guestbook-list"></div>
+            <div class="pagination" id="pagination"></div>
         </div>
     </div>
 
-    <script>
+    <script type="module">
+        // Firebase 앱과 Realtime Database 모듈을 가져옵니다.
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
+        import { getDatabase, ref, push, get } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js';
+
+        // Firebase 설정
+        const firebaseConfig = {
+            apiKey: "AIzaSyCpVUTb3OY6anUwAKE91gZn6-MS7pjgiyk",
+            authDomain: "ipip-1a70d.firebaseapp.com",
+            databaseURL: "https://ipip-1a70d-default-rtdb.firebaseio.com",
+            projectId: "ipip-1a70d",
+            storageBucket: "ipip-1a70d.firebasestorage.app",
+            messagingSenderId: "101728619870",
+            appId: "1:101728619870:web:4ccbbdc07d158e181793cf",
+            measurementId: "G-9FTKXD8PMQ"
+        };
+
+        // Firebase 앱 초기화
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // IP 가져오기 (IPv4만)
         function getIP() {
             const ipElement = document.getElementById('ip-address');
             ipElement.textContent = 'Scanning...';
@@ -118,20 +208,105 @@
                 });
         }
 
-        function copyIP() {
-            const ipText = document.getElementById('ip-address').textContent;
-            if (ipText === 'Scanning...' || ipText.startsWith('Error')) {
-                alert('IP를 먼저 확인해주세요! 😅');
-                return;
+        // 방명록 불러오기
+        async function loadGuestbook(page = 1) {
+            const list = document.getElementById('guestbook-list');
+            const pagination = document.getElementById('pagination');
+            list.innerHTML = 'Loading... 👾';
+
+            let currentPage = page; // currentPage 변수 추가
+
+            try {
+                const snapshot = await get(ref(database, 'guestbook'));
+                const entries = snapshot.val() || [];
+                console.log('방명록 데이터:', entries);  // 방명록 데이터 확인
+
+                list.innerHTML = '';
+                pagination.innerHTML = '';
+
+                const totalPages = Math.ceil(entries.length / 7);
+
+                currentPage = Math.min(Math.max(1, page), totalPages);
+
+                const start = (currentPage - 1) * 7;
+                const end = start + 7;
+                const paginatedEntries = entries.slice().reverse().slice(start, end);
+
+                if (paginatedEntries.length === 0) {
+                    list.innerHTML = 'No entries yet... 👻';
+                } else {
+                    paginatedEntries.forEach(entry => {
+                        const div = document.createElement('div');
+                        div.className = 'entry';
+                        div.innerHTML = `<span>${entry.name}</span>: ${entry.message} <small>(${entry.date})</small>`;
+                        list.appendChild(div);
+                    });
+                }
+
+                if (totalPages > 1) {
+                    if (currentPage > 1) {
+                        const prevButton = document.createElement('button');
+                        prevButton.textContent = 'Previous ⬅️';
+                        prevButton.onclick = () => loadGuestbook(currentPage - 1);
+                        pagination.appendChild(prevButton);
+                    }
+
+                    for (let i = 1; i <= totalPages; i++) {
+                        const pageButton = document.createElement('button');
+                        pageButton.textContent = i;
+                        pageButton.onclick = () => loadGuestbook(i);
+                        if (i === currentPage) pageButton.style.background = '#00CC00';
+                        pagination.appendChild(pageButton);
+                    }
+
+                    if (currentPage < totalPages) {
+                        const nextButton = document.createElement('button');
+                        nextButton.textContent = 'Next ➡️';
+                        nextButton.onclick = () => loadGuestbook(currentPage + 1);
+                        pagination.appendChild(nextButton);
+                    }
+                }
+            } catch (error) {
+                list.innerHTML = 'Error loading entries 😢';
+                console.error('Load error:', error);
             }
-            navigator.clipboard.writeText(ipText)
-                .then(() => alert('IP 복사 완료! 🎉: ' + ipText))
-                .catch(err => alert('복사 실패 😢: ' + err));
         }
 
-        window.onload = function() {
-            getIP();
-        };
+        // 방명록 작성
+        async function submitEntry() {
+            const name = document.getElementById('name').value.trim();
+            const message = document.getElementById('message').value.trim();
+
+            if (!name || !message) {
+                alert('이름과 메시지를 입력해주세요! 😅');
+                return;
+            }
+
+            const entry = {
+                name: name,
+                message: message,
+                date: new Date().toLocaleString('ko-KR')
+            };
+
+            try {
+                const guestbookRef = ref(database, 'guestbook');
+                const newEntryRef = await push(guestbookRef, entry);
+
+                console.log('새로운 방명록 항목이 추가되었습니다:', newEntryRef.key); // 추가된 항목의 key 출력
+
+                alert('방명록에 기록되었습니다! 🎉');
+                document.getElementById('name').value = '';
+                document.getElementById('message').value = '';
+                loadGuestbook(1);
+            } catch (error) {
+                alert('오류 발생 😢: ' + error);
+                console.error('Submit error:', error);
+            }
+        }
+
+        // 페이지 로드 시 IP 및 방명록 불러오기
+        getIP();
+        loadGuestbook();
     </script>
 </body>
 </html>
