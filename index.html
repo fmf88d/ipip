@@ -214,6 +214,8 @@
             const pagination = document.getElementById('pagination');
             list.innerHTML = 'Loading... 👾';
 
+            let currentPage = page; // currentPage 변수 추가
+
             try {
                 const snapshot = await get(ref(database, 'guestbook'));
                 const entries = snapshot.val() || [];
@@ -223,6 +225,7 @@
                 pagination.innerHTML = '';
 
                 const totalPages = Math.ceil(entries.length / 7);
+
                 currentPage = Math.min(Math.max(1, page), totalPages);
 
                 const start = (currentPage - 1) * 7;
