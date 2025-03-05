@@ -208,7 +208,7 @@
         }
 
         // jsonbin.io API 설정
-        const API_KEY = '$2a$10$LRQ6Bn2k9xiHoUj4kbngB.wvYvR38DmmQQxh2mY7FdIlCo/OSfaaW'; // 실제 API 키
+        const API_KEY = ''; // Public Bin이므로 API 키 필요 없음
         const BIN_ID = '67c8cc2aacd3cb34a8f5a4ef'; // 실제 Bin ID
         const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
         const ENTRIES_PER_PAGE = 10; // 페이지당 항목 수
@@ -221,24 +221,25 @@
             list.innerHTML = 'Loading... 👾';
 
             try {
-                const response = await fetch(API_URL, {
-                    headers: { 'X-Master-Key': API_KEY }
-                });
+                const response = await fetch(API_URL);
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
                 const data = await response.json();
                 console.log('API Response:', data); // 디버깅용 로그
                 const entries = (data.record && Array.isArray(data.record.entries)) ? data.record.entries : [];
+                console.log('Entries:', entries); // entries 배열 확인
                 list.innerHTML = '';
                 pagination.innerHTML = '';
 
                 const totalPages = Math.ceil(entries.length / ENTRIES_PER_PAGE);
-                currentPage = Math.min(Math.max(1, page), totalPages);
+                console.log('Total Pages:', totalPages); // 총 페이지 수 확인
+                currentPage = Math.min(Math.max(1, page), totalPages || 1);
 
                 const start = (currentPage - 1) * ENTRIES_PER_PAGE;
                 const end = start + ENTRIES_PER_PAGE;
                 const paginatedEntries = entries.slice(start, end);
+                console.log('Paginated Entries:', paginatedEntries); // 페이지별 항목 확인
 
                 if (paginatedEntries.length === 0) {
                     list.innerHTML = 'No entries yet... 👻';
@@ -274,9 +275,11 @@
                         nextButton.onclick = () => loadGuestbook(currentPage + 1);
                         pagination.appendChild(nextButton);
                     }
+                } else {
+                    console.log('No pagination needed, total pages:', totalPages);
                 }
             } catch (error) {
-                list.innerHTML = 'Error loading entries 😢';
+                list.innerHTML = `Error loading entries 😢: ${error.message}`;
                 console.error('Load error:', error);
             }
         }
@@ -298,9 +301,7 @@
             };
 
             try {
-                const response = await fetch(API_URL, {
-                    headers: { 'X-Master-Key': API_KEY }
-                });
+                const response = await fetch(API_URL);
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
@@ -311,7 +312,6 @@
                 await fetch(API_URL, {
                     method: 'PUT',
                     headers: {
-                        'X-Master-Key': API_KEY,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({ entries })
@@ -322,7 +322,7 @@
                 document.getElementById('message').value = '';
                 loadGuestbook(1); // 새로고침 시 1페이지로
             } catch (error) {
-                alert('오류 발생 😢: ' + error);
+                alert('오류 발생 😢: ' + error.message);
                 console.error('Submit error:', error);
             }
         }
