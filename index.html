@@ -89,7 +89,6 @@
             text-shadow: 0 0 5px #00FF00;
         }
 
-        /* 방명록 스타일 */
         .guestbook-section {
             margin-top: 40px;
             text-align: left;
@@ -158,7 +157,6 @@
         <button onclick="copyIP()">Copy IP 🚀</button>
         <div class="emoji">👾 Your IP is locked! 🔐</div>
 
-        <!-- 방명록 섹션 -->
         <div class="guestbook-section">
             <h1>Guestbook 💾</h1>
             <input type="text" id="name" placeholder="Name (ex: Hacker123)" maxlength="20">
@@ -177,7 +175,7 @@
             fetch('https://api64.ipify.org?format=json')
                 .then(response => response.json())
                 .then(data => {
-                    ipElement.textContent = data.ip; // IPv4 반환
+                    ipElement.textContent = data.ip;
                 })
                 .catch(error => {
                     ipElement.textContent = 'Error: Unable to retrieve IP';
@@ -202,8 +200,8 @@
         }
 
         // jsonbin.io API 설정
-        const API_KEY = '$2a$10$lhNSmOFLgwQ6YE4nTd8rtewkm/9Uh1GDh8JCULstOrs29D6Ricb4q'; // jsonbin.io에서 발급받은 API 키로 교체
-        const BIN_ID = '67c8c858e41b4d34e4a16e00'; // jsonbin.io에서 생성한 Bin ID로 교체
+        const API_KEY = '$2a$10$YOUR_API_KEY_HERE'; // jsonbin.io에서 발급받은 API 키로 교체
+        const BIN_ID = '67c8b58e41bd43e4a16e00'; // 이미지에서 확인된 Bin ID
         const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
         // 방명록 불러오기
@@ -216,14 +214,19 @@
                     headers: { 'X-Master-Key': API_KEY }
                 });
                 const data = await response.json();
-                const entries = data.record.entries || [];
+                console.log('API Response:', data); // 디버깅용 로그
+                const entries = (data.record && Array.isArray(data.record.entries)) ? data.record.entries : [];
                 list.innerHTML = '';
-                entries.reverse().forEach(entry => {
-                    const div = document.createElement('div');
-                    div.className = 'entry';
-                    div.innerHTML = `<span>${entry.name}</span>: ${entry.message} <small>(${entry.date})</small>`;
-                    list.appendChild(div);
-                });
+                if (entries.length === 0) {
+                    list.innerHTML = 'No entries yet... 👻';
+                } else {
+                    entries.reverse().forEach(entry => {
+                        const div = document.createElement('div');
+                        div.className = 'entry';
+                        div.innerHTML = `<span>${entry.name}</span>: ${entry.message} <small>(${entry.date})</small>`;
+                        list.appendChild(div);
+                    });
+                }
             } catch (error) {
                 list.innerHTML = 'Error loading entries 😢';
                 console.error('Load error:', error);
@@ -251,7 +254,7 @@
                     headers: { 'X-Master-Key': API_KEY }
                 });
                 const data = await response.json();
-                const entries = data.record.entries || [];
+                const entries = (data.record && Array.isArray(data.record.entries)) ? data.record.entries : [];
                 entries.push(entry);
 
                 await fetch(API_URL, {
