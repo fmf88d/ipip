@@ -239,7 +239,7 @@
             const ipElement = document.getElementById('ip-address');
             ipElement.textContent = 'Scanning...';
 
-            fetch('https://api64.ipify.org?format=json')
+            fetch('https://api.ipify.org?format=json')
                 .then(response => response.json())
                 .then(data => {
                     ipElement.textContent = data.ip;
