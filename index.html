@@ -47,9 +47,9 @@
             background: #000;
             padding: 5px 10px;
             border-radius: 3px;
-            white-space: nowrap; /* 줄바꿈 방지 */
-            max-width: 90%; /* 부모 요소 너비를 넘지 않도록 */
-            overflow-x: auto; /* 가로 스크롤 허용 */
+            white-space: nowrap;
+            max-width: 90%;
+            overflow-x: auto;
         }
 
         h1 {
@@ -66,9 +66,9 @@
             text-shadow: 0 0 15px #00FF00;
             display: inline-block;
             margin: 20px 0;
-            white-space: nowrap; /* IP 주소가 한 줄에 유지되도록 */
-            overflow-x: auto; /* 가로 스크롤 허용 */
-            max-width: 100%; /* 부모 요소 너비를 초과하지 않음 */
+            white-space: nowrap;
+            overflow-x: auto;
+            max-width: 100%;
             box-sizing: border-box;
         }
 
@@ -159,14 +159,13 @@
             100% { transform: translate(0); }
         }
 
-        /* 모바일 반응형 스타일 */
         @media (max-width: 600px) {
             .hacker-box {
                 padding: 15px;
             }
 
             .hacker-box::before {
-                font-size: 16px; /* 모바일에서 폰트 크기 줄임 */
+                font-size: 16px;
             }
 
             h1 {
@@ -174,9 +173,9 @@
             }
 
             #ip-address {
-                font-size: 32px; /* 모바일에서 폰트 크기 줄임 */
-                white-space: nowrap; /* 줄바꿈 방지 */
-                overflow-x: auto; /* 가로 스크롤 허용 */
+                font-size: 32px;
+                white-space: nowrap;
+                overflow-x: auto;
                 padding: 5px;
             }
 
@@ -263,7 +262,7 @@
                 .catch(err => alert('복사 실패 😢: ' + err));
         }
 
-        // 방명록 불러오기
+        // 방명록 불러오기 (최대 3페이지 제한)
         async function loadGuestbook(page = 1) {
             const list = document.getElementById('guestbook-list');
             const pagination = document.getElementById('pagination');
@@ -279,12 +278,15 @@
                 list.innerHTML = '';
                 pagination.innerHTML = '';
 
-                const totalPages = Math.ceil(Object.keys(entries).length / 7);
+                const itemsPerPage = 7; // 페이지당 항목 수
+                const maxPages = 3; // 최대 페이지 수를 3으로 고정
+                const totalItems = Object.keys(entries).length;
+                const totalPages = Math.min(Math.ceil(totalItems / itemsPerPage), maxPages); // 최대 3페이지로 제한
 
                 currentPage = Math.min(Math.max(1, page), totalPages);
 
-                const start = (currentPage - 1) * 7;
-                const end = start + 7;
+                const start = (currentPage - 1) * itemsPerPage;
+                const end = start + itemsPerPage;
                 const paginatedEntries = Object.values(entries).reverse().slice(start, end);
 
                 if (paginatedEntries.length === 0) {
