@@ -229,7 +229,7 @@
         }
 
         // 페이징 처리
-        const maxVisiblePages = 6;
+        const maxVisiblePages = 5;
         const currentBlock = Math.floor((page - 1) / maxVisiblePages);
         const startPage = currentBlock * maxVisiblePages + 1;
         const endPage = Math.min(startPage + maxVisiblePages - 1, totalPages);
@@ -284,6 +284,7 @@
   </script>
 </body>
 </html>
+
 
 
 
