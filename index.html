@@ -1,385 +1,286 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>아이피 확인 - ipip.kr</title>
-    <meta name="Description" content="ip확인 쉬운 도메인 ipip.kr">
-    <meta name="Keywords" content="ip, 아이피, 내 아이피, ip 확인, ip주소 확인, ipconfig, ifconfig, ip 조회">
-    <meta name="naver-site-verification" content="4ebe627e4f4ca60b90beee9fdb0e026e2c3ccd22" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>아이피 확인 - ipip.kr</title>
+  <meta name="Description" content="ip확인 쉬운 도메인 ipip.kr">
+  <meta name="Keywords" content="ip, 아이피, 내 아이피, ip 확인, ip주소 확인, ipconfig, ifconfig, ip 조회">
 
-    <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
-    <link rel="manifest" href="/favicon/site.webmanifest">
-    <link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#00FF00">
-    <link rel="shortcut icon" href="/favicon/favicon.ico">
-    <meta name="msapplication-TileColor" content="#0d0d0d">
-    <meta name="msapplication-config" content="/favicon/browserconfig.xml">
-    <meta name="theme-color" content="#0d0d0d">
-    
-    <style>
-        html, body {
-            margin: 0;
-            padding: 10px;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%);
-            color: #00FF00;
-            font-family: "Courier New", monospace;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            box-sizing: border-box;
-        }
+  <!-- Pretendard 웹폰트 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 
-        .hacker-box {
-            background: rgba(0, 0, 0, 0.9);
-            padding: 20px;
-            border: 3px dashed #00FF00;
-            border-radius: 10px;
-            box-shadow: inset 0 0 20px rgba(0, 255, 0, 0.3), 0 0 30px rgba(0, 255, 0, 0.7);
-            width: 100%;
-            max-width: 600px;
-            text-align: center;
-            position: relative;
-            box-sizing: border-box;
-        }
+  <!-- Favicon -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+  <link rel="manifest" href="/favicon/site.webmanifest">
+  <link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#1877f2">
+  <link rel="shortcut icon" href="/favicon/favicon.ico">
+  <meta name="msapplication-TileColor" content="#1877f2">
+  <meta name="msapplication-config" content="/favicon/browserconfig.xml">
+  <meta name="theme-color" content="#1877f2">
 
-        .hacker-box::before {
-            content: "🔒 내 IP주소 보기 🔓";
-            position: absolute;
-            top: 5px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 18px;
-            color: #00FF00;
-            text-shadow: 0 0 5px #00FF00;
-            background: #000;
-            padding: 5px 10px;
-            border-radius: 3px;
-            white-space: nowrap;
-            max-width: 90%;
-            overflow-x: auto;
-        }
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Pretendard', 'Noto Sans KR', 'Helvetica Neue', Arial, sans-serif;
+      background-color: #f0f2f5;
+      color: #1c1e21;
+    }
 
-        h1 {
-            font-size: 36px;
-            margin: 20px 0;
-            text-shadow: 0 0 10px #00FF00;
-            animation: glitch 2s infinite;
-        }
+    .navbar {
+      width: 100%;
+      background-color: #1877f2;
+      color: #fff;
+      padding: 15px 20px;
+      font-size: 20px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    }
+    .navbar .logo {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
 
-        #ip-address {
-            font-size: 48px;
-            font-weight: bold;
-            color: #00FF00;
-            text-shadow: 0 0 15px #00FF00;
-            display: inline-block;
-            margin: 20px 0;
-            white-space: nowrap;
-            overflow-x: auto;
-            max-width: 100%;
-            box-sizing: border-box;
-        }
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      text-align: center;
+    }
 
-        button {
-            padding: 15px 30px;
-            background: #00FF00;
-            color: #000;
-            border: none;
-            border-radius: 5px;
-            font-family: "Courier New", monospace;
-            font-size: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 10px #00FF00;
-            margin: 10px;
-        }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
 
-        button:hover {
-            background: #00CC00;
-            transform: scale(1.1);
-            box-shadow: 0 0 20px #00FF00;
-        }
+    #ip-address {
+      font-size: 36px;
+      font-weight: bold;
+      color: #1877f2;
+      margin: 20px 0;
+      word-break: break-word;
+    }
 
-        .emoji {
-            font-size: 24px;
-            margin: 10px 0;
-            color: #00FF00;
-            text-shadow: 0 0 5px #00FF00;
-        }
+    button {
+      padding: 12px 24px;
+      background-color: #1877f2;
+      color: #fff;
+      border: none;
+      border-radius: 25px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 5px rgba(24,119,242,0.3);
+      font-family: inherit;
+    }
+    button:hover {
+      background-color: #145dbf;
+      box-shadow: 0 4px 8px rgba(24,119,242,0.4);
+      transform: translateY(-2px);
+    }
 
-        .guestbook-section {
-            margin-top: 40px;
-            text-align: left;
-        }
+    .guestbook-section {
+      margin-top: 50px;
+      text-align: left;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
 
-        input, textarea {
-            width: 80%;
-            padding: 10px;
-            margin: 10px auto;
-            display: block;
-            background: #1a1a1a;
-            border: 1px solid #00FF00;
-            color: #00FF00;
-            font-family: "Courier New", monospace;
-            font-size: 16px;
-            border-radius: 5px;
-            box-shadow: 0 0 5px #00FF00;
-        }
+    .guestbook-section h2 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      color: #1877f2;
+      font-size: 20px;
+    }
 
-        textarea {
-            height: 100px;
-            resize: none;
-        }
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 15px;
+      outline: none;
+      transition: border 0.2s;
+      font-family: inherit;
+    }
+    input:focus, textarea:focus {
+      border: 1px solid #1877f2;
+    }
+    textarea {
+      height: 100px;
+      resize: none;
+    }
 
-        #guestbook-list {
-            margin-top: 20px;
-            max-height: 300px;
-            overflow-y: hidden;
-            border-top: 1px dashed #00FF00;
-            padding-top: 10px;
-        }
+    .entry {
+      border-bottom: 1px solid #eee;
+      padding: 10px 0;
+      font-size: 15px;
+      line-height: 1.4;
+    }
+    .entry span {
+      font-weight: bold;
+      color: #1877f2;
+    }
 
-        .entry {
-            border-bottom: 1px dashed #00FF00;
-            padding: 10px 0;
-            font-size: 16px;
-            text-shadow: 0 0 3px #00FF00;
-        }
-
-        .entry span {
-            color: #00CC00;
-            font-weight: bold;
-        }
-
-        .pagination {
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        @keyframes glitch {
-            0% { transform: translate(0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(2px, -2px); }
-            60% { transform: translate(-2px, -2px); }
-            80% { transform: translate(2px, 2px); }
-            100% { transform: translate(0); }
-        }
-
-        @media (max-width: 600px) {
-            .hacker-box {
-                padding: 15px;
-            }
-
-            .hacker-box::before {
-                font-size: 16px;
-            }
-
-            h1 {
-                font-size: 28px;
-            }
-
-            #ip-address {
-                font-size: 32px;
-                white-space: nowrap;
-                overflow-x: auto;
-                padding: 5px;
-            }
-
-            button {
-                padding: 10px 20px;
-                font-size: 16px;
-            }
-
-            .emoji {
-                font-size: 20px;
-            }
-
-            input, textarea {
-                width: 90%;
-                font-size: 14px;
-            }
-        }
-    </style>
+    .pagination {
+      margin-top: 15px;
+      text-align: center;
+    }
+    .pagination button {
+      margin: 0 4px;
+      padding: 6px 14px;
+      font-size: 14px;
+      border-radius: 20px;
+      font-family: inherit;
+    }
+  </style>
 </head>
 <body>
-    <div class="hacker-box">
-        <h1>IP Scanner Activated</h1>
-        <div><span id="ip-address">Scanning...</span></div>
-        <button id="copy-button">Copy IP 🚀</button>
-        <div class="emoji">👾 Your IP is locked! 🔐</div>
+  <div class="navbar">
+    <div class="logo">IPIP.KR</div>
+  </div>
 
-        <div class="guestbook-section">
-            <h1>방명록 💾</h1>
-            <input type="text" id="name" placeholder="닉네임" maxlength="20">
-            <textarea id="message" placeholder="여기에 내용을 적어주세용" maxlength="200"></textarea>
-            <button id="submit-button">작성 📡</button>
-            <div id="guestbook-list"></div>
-            <div class="pagination" id="pagination"></div>
-        </div>
+  <div class="container">
+    <h1>내 IP 주소</h1>
+    <div id="ip-address">확인 중...</div>
+    <button id="copy-button">IP 주소 복사</button>
+
+    <div class="guestbook-section">
+      <h2>방명록 💬</h2>
+      <input type="text" id="name" placeholder="닉네임" maxlength="20">
+      <textarea id="message" placeholder="메시지를 입력해주세요." maxlength="200"></textarea>
+      <button id="submit-button">작성하기</button>
+      <div id="guestbook-list"></div>
+      <div class="pagination" id="pagination"></div>
     </div>
+  </div>
 
-    <script type="module">
-        // Firebase 앱과 Realtime Database 모듈을 가져옵니다.
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
-        import { getDatabase, ref, push, get } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js';
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
+    import { getDatabase, ref, push, get } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js';
 
-        // Firebase 설정
-        const firebaseConfig = {
-            apiKey: "AIzaSyCpVUTb3OY6anUwAKE91gZn6-MS7pjgiyk",
-            authDomain: "ipip-1a70d.firebaseapp.com",
-            databaseURL: "https://ipip-1a70d-default-rtdb.firebaseio.com",
-            projectId: "ipip-1a70d",
-            storageBucket: "ipip-1a70d.firebasestorage.app",
-            messagingSenderId: "101728619870",
-            appId: "1:101728619870:web:4ccbbdc07d158e181793cf",
-            measurementId: "G-9FTKXD8PMQ"
-        };
+    const firebaseConfig = {
+      apiKey: "AIzaSyCpVUTb3OY6anUwAKE91gZn6-MS7pjgiyk",
+      authDomain: "ipip-1a70d.firebaseapp.com",
+      databaseURL: "https://ipip-1a70d-default-rtdb.firebaseio.com",
+      projectId: "ipip-1a70d",
+      storageBucket: "ipip-1a70d.appspot.com",
+      messagingSenderId: "101728619870",
+      appId: "1:101728619870:web:4ccbbdc07d158e181793cf",
+      measurementId: "G-9FTKXD8PMQ"
+    };
 
-        // Firebase 앱 초기화
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
 
-        // IP 가져오기 (IPv4만)
-        function getIP() {
-            const ipElement = document.getElementById('ip-address');
-            ipElement.textContent = 'Scanning...';
+    function getIP() {
+      const ipElement = document.getElementById('ip-address');
+      ipElement.textContent = '확인 중...';
 
-            fetch('https://api.ipify.org?format=json')
-                .then(response => response.json())
-                .then(data => {
-                    ipElement.textContent = data.ip;
-                })
-                .catch(error => {
-                    ipElement.textContent = 'Error: Unable to retrieve IP';
-                    console.error('IP fetch error:', error);
-                });
+      fetch('https://api.ipify.org?format=json')
+        .then(response => response.json())
+        .then(data => { ipElement.textContent = data.ip; })
+        .catch(() => { ipElement.textContent = 'IP 확인 실패'; });
+    }
+
+    function copyIP() {
+      const ip = document.getElementById('ip-address').textContent;
+      if (!ip || ip.includes('확인')) return alert('아직 IP를 불러오지 못했습니다.');
+      navigator.clipboard.writeText(ip).then(() => alert('IP 주소가 복사되었습니다!'));
+    }
+
+    async function loadGuestbook(page = 1) {
+      const list = document.getElementById('guestbook-list');
+      const pagination = document.getElementById('pagination');
+      list.innerHTML = 'Loading...';
+
+      try {
+        const snapshot = await get(ref(database, 'guestbook'));
+        const entries = snapshot.val() || {};
+        list.innerHTML = '';
+        pagination.innerHTML = '';
+
+        const itemsPerPage = 7;
+        const allEntries = Object.values(entries);
+        const totalItems = allEntries.length;
+        const totalPages = Math.ceil(totalItems / itemsPerPage);
+        const start = (page - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        const paginated = allEntries.reverse().slice(start, end);
+
+        if (!paginated.length) {
+          list.innerHTML = '아직 글이 없습니다.';
+        } else {
+          paginated.forEach(entry => {
+            const div = document.createElement('div');
+            div.className = 'entry';
+            div.innerHTML = `<span>${entry.name}</span>: ${entry.message} <small>(${entry.date})</small>`;
+            list.appendChild(div);
+          });
         }
 
-        // IP 복사 기능
-        function copyIP() {
-            const ipElement = document.getElementById('ip-address');
-            const ip = ipElement.textContent;
-            if (ip === 'Scanning...' || ip.startsWith('Error')) {
-                alert('IP를 복사할 수 없습니다! 😢');
-                return;
-            }
-            navigator.clipboard.writeText(ip)
-                .then(() => alert('IP가 복사되었습니다! 🎉'))
-                .catch(err => alert('복사 실패 😢: ' + err));
+        // 페이징 처리
+        const maxVisiblePages = 10;
+        const currentBlock = Math.floor((page - 1) / maxVisiblePages);
+        const startPage = currentBlock * maxVisiblePages + 1;
+        const endPage = Math.min(startPage + maxVisiblePages - 1, totalPages);
+
+        if (startPage > 1) {
+          const prevBtn = document.createElement('button');
+          prevBtn.textContent = '<';
+          prevBtn.onclick = () => loadGuestbook(startPage - 1);
+          pagination.appendChild(prevBtn);
         }
 
-        // 방명록 불러오기 (최대 3페이지 제한)
-        async function loadGuestbook(page = 1) {
-            const list = document.getElementById('guestbook-list');
-            const pagination = document.getElementById('pagination');
-            list.innerHTML = 'Loading... 👾';
-
-            let currentPage = page;
-
-            try {
-                const snapshot = await get(ref(database, 'guestbook'));
-                const entries = snapshot.val() || [];
-                console.log('방명록 데이터:', entries);
-
-                list.innerHTML = '';
-                pagination.innerHTML = '';
-
-                const itemsPerPage = 7; // 페이지당 항목 수
-                const maxPages = 3; // 최대 페이지 수를 3으로 고정
-                const totalItems = Object.keys(entries).length;
-                const totalPages = Math.min(Math.ceil(totalItems / itemsPerPage), maxPages); // 최대 3페이지로 제한
-
-                currentPage = Math.min(Math.max(1, page), totalPages);
-
-                const start = (currentPage - 1) * itemsPerPage;
-                const end = start + itemsPerPage;
-                const paginatedEntries = Object.values(entries).reverse().slice(start, end);
-
-                if (paginatedEntries.length === 0) {
-                    list.innerHTML = 'No entries yet... 👻';
-                } else {
-                    paginatedEntries.forEach(entry => {
-                        const div = document.createElement('div');
-                        div.className = 'entry';
-                        div.innerHTML = `<span>${entry.name}</span>: ${entry.message} <small>(${entry.date})</small>`;
-                        list.appendChild(div);
-                    });
-                }
-
-                if (totalPages > 1) {
-                    if (currentPage > 1) {
-                        const prevButton = document.createElement('button');
-                        prevButton.textContent = 'Previous ⬅️';
-                        prevButton.onclick = () => loadGuestbook(currentPage - 1);
-                        pagination.appendChild(prevButton);
-                    }
-
-                    for (let i = 1; i <= totalPages; i++) {
-                        const pageButton = document.createElement('button');
-                        pageButton.textContent = i;
-                        pageButton.onclick = () => loadGuestbook(i);
-                        if (i === currentPage) pageButton.style.background = '#00CC00';
-                        pagination.appendChild(pageButton);
-                    }
-
-                    if (currentPage < totalPages) {
-                        const nextButton = document.createElement('button');
-                        nextButton.textContent = 'Next ➡️';
-                        nextButton.onclick = () => loadGuestbook(currentPage + 1);
-                        pagination.appendChild(nextButton);
-                    }
-                }
-            } catch (error) {
-                list.innerHTML = 'Error loading entries 😢';
-                console.error('Load error:', error);
-            }
+        for (let i = startPage; i <= endPage; i++) {
+          const btn = document.createElement('button');
+          btn.textContent = i;
+          if (i === page) btn.style.background = '#1877f2';
+          btn.onclick = () => loadGuestbook(i);
+          pagination.appendChild(btn);
         }
 
-        // 방명록 작성
-        async function submitEntry() {
-            const name = document.getElementById('name').value.trim();
-            const message = document.getElementById('message').value.trim();
-
-            if (!name || !message) {
-                alert('이름과 메시지를 입력해주세요! 😅');
-                return;
-            }
-
-            const entry = {
-                name: name,
-                message: message,
-                date: new Date().toLocaleString('ko-KR')
-            };
-
-            try {
-                const guestbookRef = ref(database, 'guestbook');
-                const newEntryRef = await push(guestbookRef, entry);
-
-                console.log('새로운 방명록 항목이 추가되었습니다:', newEntryRef.key);
-
-                alert('방명록에 기록되었습니다! 🎉');
-                document.getElementById('name').value = '';
-                document.getElementById('message').value = '';
-                loadGuestbook(1);
-            } catch (error) {
-                alert('오류 발생 😢: ' + error);
-                console.error('Submit error:', error);
-            }
+        if (endPage < totalPages) {
+          const nextBtn = document.createElement('button');
+          nextBtn.textContent = '>';
+          nextBtn.onclick = () => loadGuestbook(endPage + 1);
+          pagination.appendChild(nextBtn);
         }
 
-        // 페이지 로드 시 IP 및 방명록 불러오기
-        getIP();
-        loadGuestbook();
+      } catch {
+        list.innerHTML = '불러오기 실패';
+      }
+    }
 
-        // 이벤트 리스너 추가
-        document.getElementById('copy-button').addEventListener('click', copyIP);
-        document.getElementById('submit-button').addEventListener('click', submitEntry);
-    </script>
+    async function submitEntry() {
+      const name = document.getElementById('name').value.trim();
+      const message = document.getElementById('message').value.trim();
+      if (!name || !message) return alert('닉네임과 메시지를 입력해주세요.');
+
+      const entry = { name, message, date: new Date().toLocaleString('ko-KR') };
+      try {
+        await push(ref(database, 'guestbook'), entry);
+        document.getElementById('name').value = '';
+        document.getElementById('message').value = '';
+        loadGuestbook(1);
+      } catch {
+        alert('저장 실패');
+      }
+    }
+
+    getIP();
+    loadGuestbook();
+    document.getElementById('copy-button').addEventListener('click', copyIP);
+    document.getElementById('submit-button').addEventListener('click', submitEntry);
+  </script>
 </body>
 </html>
-
