@@ -6,17 +6,8 @@
   <title>ipip.kr</title>
   <meta name="Description" content="ip확인 쉬운 도메인 ipip.kr">
   <meta name="Keywords" content="ip, 아이피, 내 아이피, ip 확인, ip주소 확인, ipconfig, ifconfig, ip 조회">
-  <meta name="google-adsense-account" content="ca-pub-3387387930815238">
+
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
-  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
-  <link rel="manifest" href="/favicon/site.webmanifest">
-  <link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#1877f2">
-  <link rel="shortcut icon" href="/favicon/favicon.ico">
-  <meta name="msapplication-TileColor" content="#1877f2">
-  <meta name="msapplication-config" content="/favicon/browserconfig.xml">
-  <meta name="theme-color" content="#1877f2">
 
   <style>
     * { box-sizing: border-box; }
@@ -35,7 +26,7 @@
       box-shadow: 0 2px 5px rgba(0,0,0,0.15);
     }
     .navbar .logo { font-size: 22px; font-weight: 700; letter-spacing: 1px; }
-    .visitor-count { font-size: 15px; font-weight: 500; opacity: 0.95; }
+    .visitor-count img { vertical-align: middle; height: 20px; }
 
     .container { max-width: 600px; margin: 40px auto; padding: 20px; text-align: center; }
     h1 { font-size: 24px; margin-bottom: 20px; }
@@ -71,7 +62,10 @@
 <body>
   <div class="navbar">
     <div class="logo">IPIP.KR</div>
-    <div class="visitor-count">방문자 수: <span id="views">-</span></div>
+    <div class="visitor-count">
+      방문자 수: 
+      <img src="https://hits.sh/ipip.kr.svg?style=flat&color=1877f2" alt="hit counter">
+    </div>
   </div>
 
   <div class="container">
@@ -152,7 +146,6 @@
           });
         }
 
-        // 페이징 처리
         const maxVisiblePages = 5;
         const currentBlock = Math.floor((page - 1) / maxVisiblePages);
         const startPage = currentBlock * maxVisiblePages + 1;
@@ -203,44 +196,10 @@
       }
     }
 
-    // 방문자 수 불러오기 (CountAPI 사용)
-    function loadVisitorCount() {
-      const viewsEl = document.getElementById('views');
-      // CountAPI hit endpoint: https://api.countapi.xyz/hit/{namespace}/{key}
-      const url = 'https://api.countapi.xyz/hit/ipip.kr/page';
-
-      fetch(url, { mode: 'cors', cache: 'no-store' })
-        .then(async res => {
-          if (!res.ok) {
-            const txt = await res.text().catch(()=>'<no-body>');
-            console.error('CountAPI non-ok response', res.status, txt);
-            viewsEl.innerText = '집계중';
-            return null;
-          }
-          return res.json();
-        })
-        .then(data => {
-          if (!data) return;
-          if (data.value !== undefined) {
-            viewsEl.innerText = Number(data.value).toLocaleString(); // 12,345 형식
-          } else {
-            console.error('CountAPI returned unexpected payload', data);
-            viewsEl.innerText = '집계중';
-          }
-        })
-        .catch(err => {
-          console.error('CountAPI fetch failed', err);
-          viewsEl.innerText = '집계중';
-        });
-    }
-
     getIP();
     loadGuestbook();
-    loadVisitorCount();
-
     document.getElementById('copy-button').addEventListener('click', copyIP);
     document.getElementById('submit-button').addEventListener('click', submitEntry);
   </script>
 </body>
 </html>
-
