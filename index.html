@@ -6,13 +6,8 @@
   <title>ipip.kr</title>
   <meta name="Description" content="ip확인 쉬운 도메인 ipip.kr">
   <meta name="Keywords" content="ip, 아이피, 내 아이피, ip 확인, ip주소 확인, ipconfig, ifconfig, ip 조회">
-
   <meta name="google-adsense-account" content="ca-pub-3387387930815238">
-  
-  <!-- Pretendard 웹폰트 -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
-
-  <!-- Favicon -->
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
@@ -25,12 +20,7 @@
 
   <style>
     * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: 'Pretendard', 'Noto Sans KR', 'Helvetica Neue', Arial, sans-serif;
-      background-color: #f0f2f5;
-      color: #1c1e21;
-    }
+    body { margin: 0; font-family: 'Pretendard', 'Noto Sans KR', 'Helvetica Neue', Arial, sans-serif; background-color: #f0f2f5; color: #1c1e21; }
 
     .navbar {
       width: 100%;
@@ -41,121 +31,47 @@
       font-weight: bold;
       display: flex;
       align-items: center;
-      justify-content: space-between; /* ✅ 왼쪽 로고 / 오른쪽 방문자 수 배치 */
+      justify-content: space-between;
       box-shadow: 0 2px 5px rgba(0,0,0,0.15);
     }
-    .navbar .logo {
-      font-size: 22px;
-      font-weight: 700;
-      letter-spacing: 1px;
-    }
-    .visitor-count { /* ✅ 방문자 수 스타일 */
-      font-size: 15px;
-      font-weight: 500;
-      opacity: 0.9;
-    }
+    .navbar .logo { font-size: 22px; font-weight: 700; letter-spacing: 1px; }
+    .visitor-count { font-size: 15px; font-weight: 500; opacity: 0.95; }
 
-    .container {
-      max-width: 600px;
-      margin: 40px auto;
-      padding: 20px;
-      text-align: center;
-    }
-
-    h1 {
-      font-size: 24px;
-      margin-bottom: 20px;
-    }
-
-    #ip-address {
-      font-size: 36px;
-      font-weight: bold;
-      color: #1877f2;
-      margin: 20px 0;
-      word-break: break-word;
-    }
+    .container { max-width: 600px; margin: 40px auto; padding: 20px; text-align: center; }
+    h1 { font-size: 24px; margin-bottom: 20px; }
+    #ip-address { font-size: 36px; font-weight: bold; color: #1877f2; margin: 20px 0; word-break: break-word; }
 
     button {
-      padding: 12px 24px;
-      background-color: #1877f2;
-      color: #fff;
-      border: none;
-      border-radius: 25px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      box-shadow: 0 2px 5px rgba(24,119,242,0.3);
+      padding: 12px 24px; background-color: #1877f2; color: #fff; border: none; border-radius: 25px;
+      font-size: 16px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 5px rgba(24,119,242,0.3);
       font-family: inherit;
     }
-    button:hover {
-      background-color: #145dbf;
-      box-shadow: 0 4px 8px rgba(24,119,242,0.4);
-      transform: translateY(-2px);
-    }
+    button:hover { background-color: #145dbf; box-shadow: 0 4px 8px rgba(24,119,242,0.4); transform: translateY(-2px); }
 
     .guestbook-section {
-      margin-top: 50px;
-      text-align: left;
-      background: #fff;
-      padding: 20px;
-      border-radius: 12px;
+      margin-top: 50px; text-align: left; background: #fff; padding: 20px; border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-
-    .guestbook-section h2 {
-      margin-top: 0;
-      margin-bottom: 15px;
-      color: #1877f2;
-      font-size: 20px;
-    }
+    .guestbook-section h2 { margin-top: 0; margin-bottom: 15px; color: #1877f2; font-size: 20px; }
 
     input, textarea {
-      width: 100%;
-      padding: 12px;
-      margin: 8px 0;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      font-size: 15px;
-      outline: none;
-      transition: border 0.2s;
-      font-family: inherit;
+      width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; font-size: 15px;
+      outline: none; transition: border 0.2s; font-family: inherit;
     }
-    input:focus, textarea:focus {
-      border: 1px solid #1877f2;
-    }
-    textarea {
-      height: 100px;
-      resize: none;
-    }
+    input:focus, textarea:focus { border: 1px solid #1877f2; }
+    textarea { height: 100px; resize: none; }
 
-    .entry {
-      border-bottom: 1px solid #eee;
-      padding: 10px 0;
-      font-size: 15px;
-      line-height: 1.4;
-    }
-    .entry span {
-      font-weight: bold;
-      color: #1877f2;
-    }
+    .entry { border-bottom: 1px solid #eee; padding: 10px 0; font-size: 15px; line-height: 1.4; }
+    .entry span { font-weight: bold; color: #1877f2; }
 
-    .pagination {
-      margin-top: 15px;
-      text-align: center;
-    }
-    .pagination button {
-      margin: 0 4px;
-      padding: 6px 14px;
-      font-size: 14px;
-      border-radius: 20px;
-      font-family: inherit;
-    }
+    .pagination { margin-top: 15px; text-align: center; }
+    .pagination button { margin: 0 4px; padding: 6px 14px; font-size: 14px; border-radius: 20px; font-family: inherit; }
   </style>
 </head>
 <body>
   <div class="navbar">
     <div class="logo">IPIP.KR</div>
-    <div class="visitor-count">방문자 수: <span id="views">-</span></div> <!-- ✅ 방문자 수 -->
+    <div class="visitor-count">방문자 수: <span id="views">-</span></div>
   </div>
 
   <div class="container">
@@ -194,7 +110,6 @@
     function getIP() {
       const ipElement = document.getElementById('ip-address');
       ipElement.textContent = '확인 중...';
-
       fetch('https://api.ipify.org?format=json')
         .then(response => response.json())
         .then(data => { ipElement.textContent = data.ip; })
@@ -265,7 +180,8 @@
           pagination.appendChild(nextBtn);
         }
 
-      } catch {
+      } catch (e) {
+        console.error('guestbook load error', e);
         list.innerHTML = '불러오기 실패';
       }
     }
@@ -281,26 +197,46 @@
         document.getElementById('name').value = '';
         document.getElementById('message').value = '';
         loadGuestbook(1);
-      } catch {
+      } catch (e) {
+        console.error('submit error', e);
         alert('저장 실패');
       }
     }
 
-    // ✅ 방문자 수 불러오기
+    // 방문자 수 불러오기 (CountAPI 사용)
     function loadVisitorCount() {
-      fetch("https://api.counterapi.dev/v1/ipip.kr/page")
-        .then(res => res.json())
-        .then(data => {
-          document.getElementById("views").innerText = data.count;
+      const viewsEl = document.getElementById('views');
+      // CountAPI hit endpoint: https://api.countapi.xyz/hit/{namespace}/{key}
+      const url = 'https://api.countapi.xyz/hit/ipip.kr/page';
+
+      fetch(url, { mode: 'cors', cache: 'no-store' })
+        .then(async res => {
+          if (!res.ok) {
+            const txt = await res.text().catch(()=>'<no-body>');
+            console.error('CountAPI non-ok response', res.status, txt);
+            viewsEl.innerText = '에러';
+            return null;
+          }
+          return res.json();
         })
-        .catch(() => {
-          document.getElementById("views").innerText = "에러";
+        .then(data => {
+          if (!data) return;
+          if (data.value !== undefined) {
+            viewsEl.innerText = Number(data.value).toLocaleString(); // 12,345 형식
+          } else {
+            console.error('CountAPI returned unexpected payload', data);
+            viewsEl.innerText = '에러';
+          }
+        })
+        .catch(err => {
+          console.error('CountAPI fetch failed', err);
+          viewsEl.innerText = '에러';
         });
     }
 
     getIP();
     loadGuestbook();
-    loadVisitorCount(); // ✅ 실행
+    loadVisitorCount();
 
     document.getElementById('copy-button').addEventListener('click', copyIP);
     document.getElementById('submit-button').addEventListener('click', submitEntry);
