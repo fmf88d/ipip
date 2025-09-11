@@ -214,7 +214,7 @@
           if (!res.ok) {
             const txt = await res.text().catch(()=>'<no-body>');
             console.error('CountAPI non-ok response', res.status, txt);
-            viewsEl.innerText = '에러';
+            viewsEl.innerText = '집계중';
             return null;
           }
           return res.json();
@@ -225,12 +225,12 @@
             viewsEl.innerText = Number(data.value).toLocaleString(); // 12,345 형식
           } else {
             console.error('CountAPI returned unexpected payload', data);
-            viewsEl.innerText = '에러';
+            viewsEl.innerText = '집계중';
           }
         })
         .catch(err => {
           console.error('CountAPI fetch failed', err);
-          viewsEl.innerText = '에러';
+          viewsEl.innerText = '집계중';
         });
     }
 
@@ -243,3 +243,4 @@
   </script>
 </body>
 </html>
+
